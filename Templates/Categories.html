@@ -1,0 +1,31 @@
+[public printCategories: ssize_t $catId, CategoriesInstance $cat, Categories_Node* $node]
+	{if !$node->isNode}
+		<li>
+			{if (ssize_t) $node->offset != $catId}
+				<a href="/category/{~Categories_GetName $cat, $node}">
+			{end}
+
+			{~Categories_GetName $cat, $node} ({~Categories_GetNumArticles $cat, $node})
+
+			{if (ssize_t) $node->offset != $catId}
+				</a>
+			{end}
+		</li>
+	{end}
+
+	{if $node->len > 0}
+		<ul>
+			{for $child in $node}
+				{block printCategories $catId, $cat, $child}
+			{end}
+		</ul>
+	{end}
+[end]
+
+<div class="post">
+	<ul>
+		{for $cat in #cats}
+			{block printCategories -1, #categories, $cat}
+		{end}
+	</ul>
+</div>

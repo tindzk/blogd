@@ -1,0 +1,26 @@
+{if #error.len != 0}
+	{#error}
+{else}
+	<div class="post">
+		<div class="title">
+			<span class="date">{~Article_GetDate #article}</span>
+			<h2>{~Article_GetTitle #article}</h2>
+			<div class="fixed"></div>
+		</div>
+
+		<div class="info">
+			{block bodyEntry Article_GetDescr(#article)}
+			<div class="fixed"></div>
+		</div>
+
+		<div class="content">
+			{block bodyEntry Article_GetContents(#article)}
+
+			{for $section in Article_GetSections(#article)}
+				<h3>{$section.title}</h3>
+				{block bodyEntry &$section.body}
+				<p></p>
+			{end}
+		</div>
+	</div>
+{end}

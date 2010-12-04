@@ -1,0 +1,22 @@
+{if #error.len != 0}
+	{#error}
+{else}
+	{for $article in #articles}
+		<div class="post">
+			<div class="title">
+				<span class="date">{~Article_GetDate $article}</span>
+				<h2>{~Article_GetTitle $article}</h2>
+				<div class="fixed"></div>
+			</div>
+
+			<div class="info">
+				<p>{block bodyEntry Article_GetDescr($article)}</p>
+				<div class="fixed"></div>
+			</div>
+
+			{if !Article_IsEmpty($article)}
+				<a href="/article/{~Article_GetPath $article}.html" class="more-link">Read article&#8230;</a>
+			{end}
+		</div>
+	{end}
+{end}

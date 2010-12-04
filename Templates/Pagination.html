@@ -1,0 +1,37 @@
+[public genPath: PagePath $path]
+	{if $path.page == pgArchive}
+		/archive
+	{else $path.page == pgCategories}
+		/category/{$path.name}
+	{end}
+[end]
+
+<div class="wp-pagenavi">
+	<span class="alignleft">
+		Page <b>{#page}</b> of <b>{#pages}</b>
+	</span>
+
+	<span class="alignright">
+		{if #page > 1}
+			<a href="{block genPath #path}/1">« First</a>
+		{end}
+
+		{for $page in #page-3..#page-1}
+			{if $page > 1}
+				<span><a href="{block genPath #path}/{$page}">{$page}</a></span>
+			{end}
+		{end}
+
+		<span class="current">{#page}</span>
+
+		{for $page in #page+1..#page+3}
+			{if $page < #pages}
+				<span><a href="{block genPath #path}/{$page}">{$page}</a></span>
+			{end}
+		{end}
+
+		{if #page < #pages}
+			<a href="{block genPath #path}/{#pages}">Last »</a>
+		{end}
+	</span>
+</div>

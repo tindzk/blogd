@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head profile="http://gmpg.org/xfn/11">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>{#title}</title>
+	<link rel="alternate" type="application/rss+xml" title="RSS feed" href="/feed" />
+	<link rel="stylesheet" href="/css/style.css"  type="text/css" media="screen" />
+	<link rel="stylesheet" href="/css/global.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="/css/{#style}/default.css" type="text/css" media="screen" title="{#style}" />
+
+	<link rel="index" title="{#blogName}" href="{#url}/" />
+	<meta name="generator" content="{$Blog_SoftwareName}" />
+</head>
+
+<body>
+	<div id="header">
+		<div class="inner">
+			<div class="content">
+				<div class="caption">
+					<h1 id="title"><a href="{#url}/">{#blogName}</a></h1>
+					<div id="tagline">{#descr}</div>
+				</div>
+
+				<ul id="navigation">
+					<li class="{if #page == pgHome}current_{end}page_item"><a href="/">Home</a></li>
+					<li class="{if #page == pgArchive}current_{end}page_item"><a href="/archive">Archive</a></li>
+					<li class="{if #page == pgCategories}current_{end}page_item"><a href="/categories">Categories</a></li>
+					{for $item in #external}
+						<li class="page_item"><a href="{$item.url}">{$item.name}</a></li>
+					{end}
+					<li class="{if #page == pgAbout}current_{end}page_item"><a href="/about">About</a></li>
+					<li id="subscribe">
+						<a rel="external nofollow" title="Subscribe to this blog." id="feed" href="/feed">
+							<img src="/images/transparent.gif" alt="RSS feed" />
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div id="container">
+		<div id="content">
+			<div id="main">
+				{tpl #body}
+			</div>
+
+			<div id="sidebar">
+				<div class="widget">
+					<div id="styleswitcher">
+						<span id="style-text">Styles:</span>
+						<span id="style-brown" class="color"><a href="/style/brown" title="Switch to brown"><img src="/images/transparent.gif" alt="" /></a></span>
+						<span id="style-black" class="color"><a href="/style/black" title="Switch to black"><img src="/images/transparent.gif" alt="" /></a></span>
+						<span id="style-white" class="color"><a href="/style/white" title="Switch to white"><img src="/images/transparent.gif" alt="" /></a></span>
+						<div class="fixed"></div>
+					</div>
+				</div>
+
+				<ul id="widgets">
+					<li class="widget widget_categories"><h3><a href="/categories">Categories</a></h3>
+						<ul>
+							{for $cat in #cats}
+								{block printCategories #catId, #categories, $cat}
+							{end}
+						</ul>
+					</li>
+				</ul>
+			</div>
+
+			<div class="fixed"></div>
+
+			<div id="bottom">
+				<div class="postnav">
+					{tpl #footer}
+					<div class="fixed"></div>
+				</div>
+
+				<div class="anchor">
+					<span><a href="#">Top</a></span>
+				</div>
+
+				<div class="fixed"></div>
+			</div>
+
+			<div class="fixed"></div>
+		</div>
+	</div>
+
+	<div id="footer">
+		<div class="inner">
+			<div class="content">
+				<p id="about">
+					Copyright &copy; {#copyright} <a href="mailto:{#mail}">{#author}</a> | Theme by <a href="http://www.neoease.com/">NeoEase</a>
+				</p>
+
+				<ul id="admin">
+					<li>Powered by <a href="{$Blog_SoftwareUrl}">{$Blog_SoftwareName}</a></li>
+				</ul>
+
+				<div class="fixed"></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

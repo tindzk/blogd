@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0">
+	<channel>
+		<title>{#blogName}</title>
+		<link>{#url}/</link>
+		<description>{#descr}</description>
+		<generator>{$Blog_SoftwareName}</generator>
+
+		{for $article in #articles}
+			<item>
+				<title>{~Article_GetTitle $article}</title>
+				<link>{#url}/article/{~Article_GetPath $article}.html</link>
+				<description><!\[CDATA\[{block bodyEntry Article_GetDescr($article)}]]></description>
+				<pubDate>{~Date_RFC822_FromDateTime DateTime_Drift(DateTime_FromDate(Article_GetDate($article)), -Blog_Timezone_Hours, -Blog_Timezone_Minutes)}</pubDate>
+				<guid>{~Article_GetPath $article}</guid>
+			</item>
+		{end}
+	</channel>
+</rss>
