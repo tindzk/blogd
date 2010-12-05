@@ -129,5 +129,8 @@ def(Articles *, GetArticles, size_t cat, size_t offset, size_t limit) {
 		Articles_Push(&arr, ptr->articles->buf[i]);
 	}
 
+	Array_Sort(arr, Article_ComparePath);
+	Array_Sort(arr, Article_CompareDate);
+
 	return arr;
 }

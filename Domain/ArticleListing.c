@@ -141,14 +141,6 @@ def(Articles *, GetArticles, size_t offset, size_t limit) {
 	return arr;
 }
 
-static sdef(short, ComparePath, ArticleInstance *a, ArticleInstance *b) {
-	return String_NaturalCompare(Article_GetPath(*b), Article_GetPath(*a));
-}
-
-static sdef(short, CompareDate, ArticleInstance *a, ArticleInstance *b) {
-	return Date_Compare(Article_GetDate(*b), Article_GetDate(*a));
-}
-
 def(void, Populate, String path) {
 	Directory dir;
 	Directory_Init(&dir, path);
@@ -165,6 +157,6 @@ def(void, Populate, String path) {
 
 	Directory_Destroy(&dir);
 
-	Array_Sort(this->articles, ref(ComparePath));
-	Array_Sort(this->articles, ref(CompareDate));
+	Array_Sort(this->articles, Article_ComparePath);
+	Array_Sort(this->articles, Article_CompareDate);
 }

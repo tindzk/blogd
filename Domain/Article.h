@@ -40,5 +40,7 @@ def(Body *, GetContents);
 def(void, AddSection, String title, Body body);
 def(Sections *, GetSections);
 def(bool, IsEmpty);
+sdef(short, ComparePath, ArticleInstance *a, ArticleInstance *b);
+sdef(short, CompareDate, ArticleInstance *a, ArticleInstance *b);
 
 #undef self

@@ -84,3 +84,11 @@ def(bool, IsEmpty) {
 	return this->sections->len == 0
 		&& this->contents.type == Body_Type_Empty;
 }
+
+sdef(short, ComparePath, ArticleInstance *a, ArticleInstance *b) {
+	return String_NaturalCompare(Article_GetPath(*b), Article_GetPath(*a));
+}
+
+sdef(short, CompareDate, ArticleInstance *a, ArticleInstance *b) {
+	return Date_Compare(Article_GetDate(*b), Article_GetDate(*a));
+}
