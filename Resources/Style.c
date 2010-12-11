@@ -1,6 +1,5 @@
 #import "Resource.h"
 
-#undef self
 #define self resStyle
 
 class {

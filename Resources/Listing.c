@@ -1,6 +1,5 @@
 #import "Resource.h"
 
-#undef self
 #define self resListing
 
 #define resListing_ArticlesPerPage 5
