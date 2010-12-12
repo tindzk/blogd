@@ -152,7 +152,7 @@ def(void, Parse, String path) {
 	File_Open(&file, path, FileStatus_ReadOnly);
 
 	BufferedStream stream;
-	BufferedStream_Init(&stream, &FileStreamImpl, &file);
+	BufferedStream_Init(&stream, File_AsStream(&file));
 	BufferedStream_SetInputBuffer(&stream, 1024, 128);
 
 	YAML yml;

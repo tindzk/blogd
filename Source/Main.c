@@ -25,12 +25,12 @@ void OnLogMessage(__unused void *ptr, String msg, Logger_Level level, String fil
 	String_Destroy(&tmp);
 }
 
-bool startServer(Server *server, GenericClientListener *listener) {
+bool startServer(Server *server, ClientListener listener) {
 	try {
-		Server_Init(server, 8080, &GenericClientListenerImpl, listener);
+		Server_Init(server, 8080, listener);
 		Logger_Info(&logger, $("Server started."));
 		excReturn true;
-	} clean catch (Socket, excAddressInUse) {
+	} clean catch (Socket, AddressInUse) {
 		Logger_Error(&logger, $("The address is already in use!"));
 		excReturn false;
 	} finally {
@@ -66,11 +66,13 @@ int main(int argc, char *argv[]) {
 		Configuration_GetArticlePath(config));
 
 	GenericClientListener listener;
-	GenericClientListener_Init(&listener, &HttpConnectionImpl);
+	GenericClientListener_Init(&listener, HttpConnection_GetImpl());
 
 	Server server;
 
-	if (!startServer(&server, &listener)) {
+	if (!startServer(&server,
+		GenericClientListener_AsClientListener(&listener)))
+	{
 		return ExitStatus_Failure;
 	}
 
@@ -78,7 +80,7 @@ int main(int argc, char *argv[]) {
 		while (true) {
 			Server_Process(&server);
 		}
-	} clean catch(Signal, excSigInt) {
+	} clean catch(Signal, SigInt) {
 		Logger_Info(&logger, $("Server shutdown."));
 	} catchAny {
 		Exception_Print(e);
