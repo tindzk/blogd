@@ -17,12 +17,8 @@ void OnLogMessage(__unused void *ptr, String msg, Logger_Level level, String fil
 	String slevel = Logger_ResolveLevel(level);
 	String sline  = Integer_ToString(line);
 
-	String tmp;
-	String_Print(tmp = String_Format(
-		String("[%] % (%:%)\n"),
-		slevel, msg, file, sline));
-
-	String_Destroy(&tmp);
+	String_FmtPrint($("[%] % (%:%)\n"),
+		slevel, msg, file, sline);
 }
 
 bool startServer(Server *server, ClientListener listener) {
