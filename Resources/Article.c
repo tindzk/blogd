@@ -30,6 +30,10 @@ action(Article) {
 		.article = article
 	};
 
+	if (Article_IsNull(article)) {
+		Response_SetStatus(resp, HTTP_Status_ClientError_NotFound);
+	}
+
 	MainTemplate main = GetMainTemplate(Session_GetData(sess));
 
 	main.body   = Template(Template_Article, tpl);
