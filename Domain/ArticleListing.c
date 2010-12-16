@@ -62,6 +62,9 @@ static def(void, Process, String dir, String file) {
 	Article_SetTitle(article,
 		Parser_GetMeta(&this->parser, $("title")));
 
+	Article_SetLanguage(article,
+		Parser_GetMeta(&this->parser, $("language")));
+
 	Date date = call(ParseDate,
 		Parser_GetMeta(&this->parser, $("date")));
 

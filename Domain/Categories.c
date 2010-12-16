@@ -47,6 +47,10 @@ def(ref(Node) *, GetRoot) {
 	return (ref(Node) *) &this->tree.root;
 }
 
+def(CategoryArray *, GetCategories) {
+	return this->categories;
+}
+
 def(void, Insert, String value) {
 	if (String_Contains(value, $("/"))) {
 		Logger_Error(&logger,

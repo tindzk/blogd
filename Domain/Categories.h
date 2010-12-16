@@ -27,6 +27,7 @@ def(void, Destroy);
 def(void, EnterNode);
 def(void, LeaveNode);
 def(ref(Node) *, GetRoot);
+def(CategoryArray *, GetCategories);
 def(void, Insert, String value);
 def(String, GetName, ref(Node) *node);
 def(size_t, GetNumArticles, ref(Node) *node);

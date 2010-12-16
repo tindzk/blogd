@@ -21,6 +21,14 @@
 				{block bodyEntry &$section.body}
 				<p></p>
 			{end}
+
+			{if #flattr.len != 0}
+				<a class="FlattrButton"
+					style="display:none;"
+					title="{~Article_GetTitle #article}"
+					rev="flattr;uid:{#flattr};language:{~Article_GetLanguage #article};category:text;tags:{~Article_GetTags #article};"
+					href="{#url}/article/{~Article_GetPath #article}.html"></a>
+			{end}
 		</div>
 	</div>
 {end}

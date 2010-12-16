@@ -7,6 +7,7 @@ MainTemplate GetMainTemplate(String style) {
 
 	main.page       = pgNone;
 	main.blogName   = Configuration_GetTitle(config);
+	main.flattr     = Configuration_GetFlattr(config).len != 0;
 	main.url        = Configuration_GetUrl(config);
 	main.descr      = Configuration_GetDescr(config);
 	main.copyright  = Configuration_GetCopyright(config);

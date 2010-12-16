@@ -42,7 +42,9 @@ tpl(Pagination) {
 };
 
 tpl(Article) {
+	String url;
 	String error;
+	String flattr;
 	ArticleInstance article;
 };
 
@@ -66,6 +68,8 @@ tpl(Main) {
 
 	String title;
 	String blogName;
+
+	bool flattr;
 
 	String mail;
 	String author;

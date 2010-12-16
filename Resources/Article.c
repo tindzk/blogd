@@ -20,6 +20,9 @@ action(Article) {
 		Utils_ExtractName(String_Trim(this->article)));
 
 	ArticleTemplate tpl = {
+		.url    = Configuration_GetUrl(config),
+		.flattr = Configuration_GetFlattr(config),
+
 		.error = Article_IsNull(article)
 			? $("Article not found.")
 			: $(""),

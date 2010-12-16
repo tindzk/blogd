@@ -25,6 +25,7 @@ class {
 	String about;
 	String filePath;
 	String mail;
+	String flattr;
 	ExternalArray *external;
 };
 
@@ -43,6 +44,7 @@ Get(ArticlePath);
 Get(About);
 Get(FilePath);
 Get(Mail);
+Get(Flattr);
 
 #undef Get
 

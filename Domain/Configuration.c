@@ -18,6 +18,7 @@ def(void, Init) {
 	this->about     = HeapString(0);
 	this->filePath  = HeapString(0);
 	this->mail      = HeapString(0);
+	this->flattr    = HeapString(0);
 	this->external  = ExternalArray_New(0);
 }
 
@@ -32,6 +33,7 @@ def(void, Destroy) {
 	String_Destroy(&this->about);
 	String_Destroy(&this->filePath);
 	String_Destroy(&this->mail);
+	String_Destroy(&this->flattr);
 
 	foreach (item, this->external) {
 		String_Destroy(&item->name);
@@ -56,6 +58,7 @@ Get(ArticlePath, articles);
 Get(About, about);
 Get(FilePath, filePath);
 Get(Mail, mail);
+Get(Flattr, flattr);
 
 def(ExternalArray *, GetExternal) {
 	return this->external;
@@ -126,6 +129,8 @@ static def(void, ParseYaml, YAML_Node *node) {
 				String_Copy(&this->filePath, value);
 			} else if (String_Equals(name, $("mail"))) {
 				String_Copy(&this->mail, value);
+			} else if (String_Equals(name, $("flattr"))) {
+				String_Copy(&this->flattr, value);
 			} else {
 				Logger_Error(&logger, $("Unknown option '%'"),
 					name);

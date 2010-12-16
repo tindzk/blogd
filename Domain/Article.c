@@ -1,8 +1,11 @@
+#import "Categories.h"
 #import "Article.h"
 
 #define self Article
 
 def(void, Init) {
+	this->lng      = HeapString(0);
+	this->tags     = HeapString(0);
 	this->title    = HeapString(0);
 	this->path     = HeapString(0);
 	this->date     = Date_Empty();
@@ -12,6 +15,8 @@ def(void, Init) {
 }
 
 def(void, Destroy) {
+	String_Destroy(&this->lng);
+	String_Destroy(&this->tags);
 	String_Destroy(&this->title);
 	String_Destroy(&this->path);
 	Body_Destroy(&this->descr);
@@ -41,6 +46,18 @@ def(String, GetTitle) {
 	return String_Disown(this->title);
 }
 
+def(void, SetLanguage, String lng) {
+	String_Copy(&this->lng, lng);
+}
+
+def(String, GetLanguage) {
+	if (this->lng.len == 0) {
+		return Blog_DefaultLanguage;
+	}
+
+	return String_Disown(this->lng);
+}
+
 def(void, SetDate, Date date) {
 	this->date = date;
 }
@@ -65,6 +82,31 @@ def(void, SetContents, Body contents) {
 
 def(Body *, GetContents) {
 	return &this->contents;
+}
+
+def(String, GetTags) {
+	if (this->tags.buf == NULL) {
+		this->tags = HeapString(32);
+
+		CategoryArray *cats = Categories_GetCategories(Categories_GetInstance());
+
+		foreach (cat, cats) {
+			foreach (article, cat->articles) {
+				if (Article_Equals(*article, this)) {
+					String_Append(&this->tags, cat->name);
+					String_Append(&this->tags, ',');
+
+					break;
+				}
+			}
+		}
+
+		if (this->tags.len > 0) {
+			String_Crop(&this->tags, 0, -1);
+		}
+	}
+
+	return String_Disown(this->tags);
 }
 
 def(void, AddSection, String title, Body body) {
