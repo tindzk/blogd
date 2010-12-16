@@ -29,13 +29,11 @@ def(Date, ParseDate, String s) {
 
 	StringArray *items = String_Split(s, '-');
 
-	if (items->len < 3) {
-		return date;
+	if (items->len > 2) {
+		date.year  = UInt16_Parse(items->buf[0]);
+		date.month = UInt8_Parse(items->buf[1]);
+		date.day   = UInt8_Parse(items->buf[2]);
 	}
-
-	date.year  = UInt16_Parse(items->buf[0]);
-	date.month = UInt8_Parse(items->buf[1]);
-	date.day   = UInt8_Parse(items->buf[2]);
 
 	StringArray_Free(items);
 
