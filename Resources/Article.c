@@ -3,6 +3,7 @@
 #define self resArticle
 
 class {
+	String file;
 	String article;
 };
 
@@ -44,14 +45,30 @@ action(Article) {
 	}
 }
 
+action(ServeFile) {
+	ConfigurationInstance config = Configuration_GetInstance();
+
+	String path = String_Format($("%/%-%"),
+		Configuration_GetArticlePath(config),
+		this->article, this->file);
+
+	FileResponse(resp, path, *(DateTime *) &req.lastModified);
+
+	String_Destroy(&path);
+}
+
 ImplEx(Resource) = {
 	.size = sizeof(self),
 
 	.members = {
+		{ .name = $("file"),    Member(file)    },
 		{ .name = $("article"), Member(article) }
 	},
 
 	.routes = {
+		{ .path   = $("/article/$article/$file"),
+		  .action = Action(ServeFile) },
+
 		{ .path   = $("/article/$article"),
 		  .action = Action(Article) }
 	}
