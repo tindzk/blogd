@@ -711,6 +711,26 @@ textarea#comment {
 }
 /* related posts END */
 
+.path {
+	font: 1.4em Monaco,Lucida Console,monospace;
+	font-size: 11px;
+	color: #2060A0;
+}
+
+.class, .macro, .function {
+	color: #5F5A60;
+	font-size: 12px;
+	line-height: 18px;
+	font-family: Monaco, Consolas, "Lucida Console", monospace;
+}
+
+.variable {
+	color: #19469D;
+	font-size: 12px;
+	line-height: 18px;
+	font-family: Monaco, Consolas, "Lucida Console", monospace;
+}
+
 .keyword, .term {
 	background: #f8f8ff;
 	border: 1px solid #dedede;
