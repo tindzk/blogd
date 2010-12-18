@@ -13,7 +13,7 @@ action(View) {
 		Configuration_GetAbout(config)
 	};
 
-	MainTemplate main = GetMainTemplate(Session_GetData(sess));
+	MainTemplate main = GetMainTemplate(sess);
 
 	main.page = pgAbout;
 	main.body = Template(Template_About, tpl);

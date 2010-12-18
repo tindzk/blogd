@@ -7,7 +7,7 @@ class {
 };
 
 action(Categories) {
-	MainTemplate main = GetMainTemplate(Session_GetData(sess));
+	MainTemplate main = GetMainTemplate(sess);
 
 	CategoriesTemplate tpl = {
 		.categories = main.categories,

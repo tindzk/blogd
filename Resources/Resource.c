@@ -1,6 +1,8 @@
 #import "Resource.h"
 
-MainTemplate GetMainTemplate(String style) {
+MainTemplate GetMainTemplate(SessionInstance sess) {
+	UserSessionInstance usrSess = (UserSessionInstance) Session_GetData(sess);
+
 	ConfigurationInstance config = Configuration_GetInstance();
 
 	MainTemplate main;
@@ -20,7 +22,7 @@ MainTemplate GetMainTemplate(String style) {
 	main.categories = Categories_GetInstance();
 	main.cats       = Categories_GetRoot(main.categories);
 	main.catId      = -1;
-	main.style      = style;
+	main.style      = UserSession_GetStyle(usrSess);
 
 	if (main.style.len == 0) {
 		main.style = Blog_DefaultStyle;

@@ -7,7 +7,9 @@
 #import <GenericClientListener.h>
 
 #import <Debit/HttpConnection.h>
+#import <Debit/SessionManager.h>
 
+#import <Domain/UserSession.h>
 #import <Domain/Configuration.h>
 #import <Domain/ArticleListing.h>
 
@@ -63,6 +65,9 @@ int main(int argc, char *argv[]) {
 
 	GenericClientListener listener;
 	GenericClientListener_Init(&listener, HttpConnection_GetImpl());
+
+	SessionManagerInstance sessMgr = SessionManager_GetInstance();
+	SessionManager_SetBackend(sessMgr, UserSession_GetImpl());
 
 	Server server;
 

@@ -7,12 +7,14 @@ class {
 };
 
 action(Switch) {
-	if (String_Equals(this->style, $("black"))) {
-		Session_SetData(sess, $("black"));
-	} else if (String_Equals(this->style, $("brown"))) {
-		Session_SetData(sess, $("brown"));
-	} else if (String_Equals(this->style, $("white"))) {
-		Session_SetData(sess, $("white"));
+	UserSessionInstance usrSess = (UserSessionInstance) Session_GetData(sess);
+
+	if (String_Equals(this->style, $("black"))
+	 || String_Equals(this->style, $("brown"))
+	 || String_Equals(this->style, $("white")))
+	{
+		UserSession_SetStyle(usrSess, this->style);
+		Session_SetChanged(sess);
 	}
 
 	if (req.referer.len == 0) {

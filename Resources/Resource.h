@@ -14,7 +14,8 @@
 
 #import <Domain/Article.h>
 #import <Domain/Categories.h>
+#import <Domain/UserSession.h>
 #import <Domain/Configuration.h>
 #import <Domain/ArticleListing.h>
 
-MainTemplate GetMainTemplate(String style);
+MainTemplate GetMainTemplate(SessionInstance sess);

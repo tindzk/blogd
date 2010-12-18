@@ -34,7 +34,7 @@ action(Article) {
 		Response_SetStatus(resp, HTTP_Status_ClientError_NotFound);
 	}
 
-	MainTemplate main = GetMainTemplate(Session_GetData(sess));
+	MainTemplate main = GetMainTemplate(sess);
 
 	main.body   = Template(Template_Article, tpl);
 	main.footer = Template(Template_License, license);

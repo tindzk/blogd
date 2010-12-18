@@ -45,7 +45,7 @@ action(Archive) {
 	ListingTemplate tpl;
 	tpl.error = $("");
 
-	MainTemplate main = GetMainTemplate(Session_GetData(sess));
+	MainTemplate main = GetMainTemplate(sess);
 
 	main.page = (this->home)
 		? pgHome
@@ -97,7 +97,7 @@ action(Category) {
 
 	String path = $("");
 
-	MainTemplate main = GetMainTemplate(Session_GetData(sess));
+	MainTemplate main = GetMainTemplate(sess);
 
 	main.page   = pgCategories;
 	main.body   = Template(Template_Listing, tpl);
