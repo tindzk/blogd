@@ -132,8 +132,10 @@ a .sided:hover {
 #notice .content .separator {
 	border-right:1px solid #C6C6C6;
 }
+h2, h3 {
+	color: #1750E2;
+}
 .post .title h2 {
-	color:#333;
 	padding-bottom:3px;
 	border-bottom:1px solid #ccc;
 }
