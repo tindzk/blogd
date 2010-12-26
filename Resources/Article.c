@@ -1,11 +1,82 @@
 #import "Resource.h"
 
+#import <docslib/TextBody.h>
+#import <docslib/TextDocument.h>
+
 #define self resArticle
 
 class {
 	String file;
 	String article;
 };
+
+action(AsText) {
+	ConfigurationInstance config = Configuration_GetInstance();
+
+	ArticleListingInstance listing = ArticleListing_GetInstance();
+
+	ArticleInstance article = ArticleListing_GetArticle(listing,
+		Utils_ExtractName(String_Trim(this->article)));
+
+	TextDocument doc;
+	TextDocument_Init(&doc, 80);
+
+	TextDocument_Add(&doc, $("Title: "));
+	TextDocument_Add(&doc, Article_GetTitle(article));
+	TextDocument_AddLine(&doc);
+
+	String date = Date_Format(Article_GetDate(article), true);
+	TextDocument_Add(&doc, $("Date: "));
+	TextDocument_Add(&doc, date);
+	TextDocument_AddLine(&doc);
+	String_Destroy(&date);
+
+	if (Article_GetDescr(article)->type != Body_Type_Empty) {
+		TextDocument_Add(&doc, $("Description: "));
+		TextBody_Process(Article_GetDescr(article), &doc);
+		TextDocument_AddLine(&doc);
+	}
+
+	if (Article_GetContents(article)->type != Body_Type_Empty) {
+		TextDocument_Add(&doc, $("Contents: "));
+		TextBody_Process(Article_GetContents(article), &doc);
+		TextDocument_AddLine(&doc);
+	}
+
+	TextDocument_AddLine(&doc);
+
+	Sections *sects = Article_GetSections(article);
+
+	foreach (sect, sects) {
+		TextDocument_Add(&doc, $("== "));
+		TextDocument_Add(&doc, sect->title);
+		TextDocument_AddLine(&doc);
+
+		TextBody_Process(&sect->body, &doc);
+		TextDocument_AddLine(&doc);
+	}
+
+	TextDocument_AddLine(&doc);
+	TextDocument_AddLine(&doc);
+
+	TextDocument_Add(&doc, $("--"));
+	TextDocument_AddLine(&doc);
+
+	TextDocument_Add(&doc, $("Copyright © "));
+	TextDocument_Add(&doc, Configuration_GetCopyright(config));
+	TextDocument_Add(&doc, $(" "));
+	TextDocument_Add(&doc, Configuration_GetAuthor(config));
+
+	TextDocument_AddLine(&doc);
+	TextDocument_AddLine(&doc);
+
+	TextDocument_Add(&doc, Configuration_GetLicense(config));
+
+	Response_SetBufferBody(resp, String_Clone(doc.doc));
+	Response_SetContentType(resp, $("text/plain; charset=utf-8"));
+
+	TextDocument_Destroy(&doc);
+}
 
 action(Article) {
 	ConfigurationInstance config = Configuration_GetInstance();
@@ -75,6 +146,9 @@ ImplEx(Resource) = {
 	.routes = {
 		{ .path   = $("/article/:article/:file"),
 		  .action = Action(ServeFile) },
+
+		{ .path   = $("/article/{article}.txt"),
+		  .action = Action(AsText) },
 
 		{ .path   = $("/article/:article"),
 		  .action = Action(Article) }
