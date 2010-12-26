@@ -51,8 +51,8 @@ action(Archive) {
 		? pgHome
 		: pgArchive;
 
-	main.body   = Template(Template_Listing, tpl);
-	main.footer = Template(Template_Pagination, pg);
+	main.body   = tplListing(&tpl);
+	main.footer = tplPagination(&pg);
 
 	size_t articles = ArticleListing_CountArticles(listing);
 
@@ -67,7 +67,7 @@ action(Archive) {
 		(pg.page - 1) * ref(ArticlesPerPage),
 		ref(ArticlesPerPage));
 
-	TemplateResponse(resp, Template_Main, &main);
+	TemplateResponse(resp, tplMain(&main));
 
 	Articles_Free(tpl.articles);
 }
@@ -100,8 +100,8 @@ action(Category) {
 	MainTemplate main = GetMainTemplate(sess);
 
 	main.page   = pgCategories;
-	main.body   = Template(Template_Listing, tpl);
-	main.footer = Template(Template_Pagination, pg);
+	main.body   = tplListing(&tpl);
+	main.footer = tplPagination(&pg);
 
 	if (catName.len == 0) {
 		tpl.error = $("No category selected.");
@@ -136,7 +136,7 @@ action(Category) {
 		Configuration_GetTitle(config),
 		path);
 
-	TemplateResponse(resp, Template_Main, &main);
+	TemplateResponse(resp, tplMain(&main));
 
 	String_Destroy(&main.title);
 
@@ -158,7 +158,7 @@ action(Feed) {
 	feed.articles = ArticleListing_GetArticles(listing,
 		0, ref(ArticlesInFeed));
 
-	TemplateResponse(resp, Template_Feed, &feed);
+	TemplateResponse(resp, tplFeed(&feed));
 
 	Articles_Free(feed.articles);
 }
@@ -175,16 +175,16 @@ ImplEx(Resource) = {
 	},
 
 	.routes = {
-		{ .path   = $("/category/$category/$page"),
+		{ .path   = $("/category/:category/:page"),
 		  .action = Action(Category) },
 
-		{ .path   = $("/category/$category"),
+		{ .path   = $("/category/:category"),
 		  .action = Action(Category) },
 
 		{ .path   = $("/category"),
 		  .action = Action(Category) },
 
-		{ .path   = $("/archive/$page"),
+		{ .path   = $("/archive/:page"),
 		  .action = Action(Archive) },
 
 		{ .path   = $("/archive"),

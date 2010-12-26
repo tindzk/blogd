@@ -15,9 +15,9 @@ action(Categories) {
 	};
 
 	main.page = pgCategories;
-	main.body = Template(Template_Categories, tpl);
+	main.body = tplCategories(&tpl);
 
-	TemplateResponse(resp, Template_Main, &main);
+	TemplateResponse(resp, tplMain(&main));
 }
 
 ImplEx(Resource) = {

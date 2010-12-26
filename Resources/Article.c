@@ -19,6 +19,8 @@ action(Article) {
 	ArticleInstance article = ArticleListing_GetArticle(listing,
 		Utils_ExtractName(String_Trim(this->article)));
 
+	MainTemplate main = GetMainTemplate(sess);
+
 	ArticleTemplate tpl = {
 		.url    = Configuration_GetUrl(config),
 		.flattr = Configuration_GetFlattr(config),
@@ -34,10 +36,8 @@ action(Article) {
 		Response_SetStatus(resp, HTTP_Status_ClientError_NotFound);
 	}
 
-	MainTemplate main = GetMainTemplate(sess);
-
-	main.body   = Template(Template_Article, tpl);
-	main.footer = Template(Template_License, license);
+	main.body   = tplArticle(&tpl);
+	main.footer = tplLicense(&license);
 
 	if (!Article_IsNull(article)) {
 		main.title = String_Format($("%: %"),
@@ -45,7 +45,7 @@ action(Article) {
 			Article_GetTitle(article));
 	}
 
-	TemplateResponse(resp, Template_Main, &main);
+	TemplateResponse(resp, tplMain(&main));
 
 	if (main.title.mutable) {
 		String_Destroy(&main.title);
@@ -73,10 +73,10 @@ ImplEx(Resource) = {
 	},
 
 	.routes = {
-		{ .path   = $("/article/$article/$file"),
+		{ .path   = $("/article/:article/:file"),
 		  .action = Action(ServeFile) },
 
-		{ .path   = $("/article/$article"),
+		{ .path   = $("/article/:article"),
 		  .action = Action(Article) }
 	}
 };

@@ -62,19 +62,19 @@ ImplEx(Resource) = {
 	},
 
 	.routes = {
-		{ .path   = $("/css/$style/$file"),
+		{ .path   = $("/css/:style/:file"),
 		  .action = Action(ServeCss) },
 
-		{ .path   = $("/css/$file"),
+		{ .path   = $("/css/:file"),
 		  .action = Action(ServeCss) },
 
-		{ .path   = $("/js/$file"),
+		{ .path   = $("/js/:file"),
 		  .action = Action(ServeJs) },
 
-		{ .path   = $("/images/$style/$file"),
+		{ .path   = $("/images/:style/:file"),
 		  .action = Action(ServeImage) },
 
-		{ .path   = $("/images/$file"),
+		{ .path   = $("/images/:file"),
 		  .action = Action(ServeImage) }
 	}
 };

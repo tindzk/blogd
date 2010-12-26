@@ -31,4 +31,5 @@ mkdir -p Build/{Resources,Jivai,Debit,Domain,docslib}
 	optimlevel=0                  \
 	dbgsym=yes                    \
 	inclhdr=config.h              \
+	link=@dl                      \
 	link=@bfd

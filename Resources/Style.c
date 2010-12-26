@@ -32,7 +32,7 @@ ImplEx(Resource) = {
 	},
 
 	.routes = {
-		{ .path   = $("/style/$style"),
+		{ .path   = $("/style/:style"),
 		  .action = Action(Switch) }
 	}
 };

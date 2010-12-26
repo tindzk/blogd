@@ -16,9 +16,9 @@ action(View) {
 	MainTemplate main = GetMainTemplate(sess);
 
 	main.page = pgAbout;
-	main.body = Template(Template_About, tpl);
+	main.body = tplAbout(&tpl);
 
-	TemplateResponse(resp, Template_Main, &main);
+	TemplateResponse(resp, tplMain(&main));
 }
 
 ImplEx(Resource) = {
