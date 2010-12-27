@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 mkdir -p Build/{Resources,Jivai,Debit,Domain,docslib}
 
