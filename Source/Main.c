@@ -3,6 +3,7 @@
 #import <Logger.h>
 #import <Signal.h>
 #import <Integer.h>
+#import <Terminal.h>
 #import <Exception.h>
 #import <GenericClientListener.h>
 
@@ -14,12 +15,14 @@
 #import <Domain/ArticleListing.h>
 
 Logger logger;
+Terminal term;
 
 void OnLogMessage(__unused void *ptr, FmtString msg, Logger_Level level, String file, int line) {
 	String slevel = Logger_ResolveLevel(level);
 	String sline  = Integer_ToString(line);
 
-	String_FmtPrint($("[%] $ (%:%)\n"),
+	Terminal_FmtPrint(&term,
+		$("[%] $ (%:%)\n"),
 		slevel, msg, file, sline);
 }
 
@@ -40,6 +43,8 @@ bool startServer(Server *server, ClientListener listener) {
 
 int main(int argc, char *argv[]) {
 	Signal0();
+
+	Terminal_Init(&term, File_StdIn, File_StdOut, false);
 
 	Logger_Init(&logger, Callback(NULL, OnLogMessage),
 		Logger_Level_Fatal |
@@ -93,6 +98,7 @@ int main(int argc, char *argv[]) {
 		excReturn ExitStatus_Failure;
 	} finally {
 		Server_Destroy(&server);
+		Terminal_Destroy(&term);
 	} tryEnd;
 
 	return ExitStatus_Success;
