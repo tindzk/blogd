@@ -8,17 +8,17 @@ SingletonDestructor(self);
 extern Logger logger;
 
 def(void, Init) {
-	this->title     = HeapString(0);
-	this->descr     = HeapString(0);
-	this->author    = HeapString(0);
-	this->copyright = HeapString(0);
-	this->license   = HeapString(0);
-	this->url       = HeapString(0);
-	this->articles  = HeapString(0);
-	this->about     = HeapString(0);
-	this->filePath  = HeapString(0);
-	this->mail      = HeapString(0);
-	this->flattr    = HeapString(0);
+	this->title     = $("");
+	this->descr     = $("");
+	this->author    = $("");
+	this->copyright = $("");
+	this->license   = $("");
+	this->url       = $("");
+	this->articles  = $("");
+	this->about     = $("");
+	this->filePath  = $("");
+	this->mail      = $("");
+	this->flattr    = $("");
 	this->external  = ExternalArray_New(0);
 }
 

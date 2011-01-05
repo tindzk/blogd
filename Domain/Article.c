@@ -4,10 +4,10 @@
 #define self Article
 
 def(void, Init) {
-	this->lng      = HeapString(0);
-	this->tags     = HeapString(0);
-	this->title    = HeapString(0);
-	this->path     = HeapString(0);
+	this->lng      = $("");
+	this->tags     = $("");
+	this->title    = $("");
+	this->path     = $("");
 	this->date     = Date_Empty();
 	this->descr    = Body_Empty();
 	this->contents = Body_Empty();
@@ -86,7 +86,7 @@ def(Body *, GetContents) {
 
 def(String, GetTags) {
 	if (this->tags.buf == NULL) {
-		this->tags = HeapString(32);
+		this->tags = String_New(32);
 
 		CategoryArray *cats = Categories_GetCategories(Categories_GetInstance());
 

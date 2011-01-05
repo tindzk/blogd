@@ -118,9 +118,7 @@ action(Article) {
 
 	TemplateResponse(resp, tplMain(&main));
 
-	if (main.title.mutable) {
-		String_Destroy(&main.title);
-	}
+	String_Destroy(&main.title);
 }
 
 action(ServeFile) {

@@ -3,7 +3,7 @@
 #define self UserSession
 
 static def(void, Init) {
-	this->style = HeapString(0);
+	this->style = $("");
 }
 
 static def(void, Destroy) {
