@@ -27,15 +27,14 @@ def(void, Destroy) {
 def(Date, ParseDate, String s) {
 	Date date = Date_Empty();
 
-	StringArray *items = String_Split(&s, '-');
+	StringArray *items = String_Split(s, '-');
 
 	if (items->len > 2) {
-		date.year  = UInt16_Parse(*items->buf[0]);
-		date.month = UInt8_Parse(*items->buf[1]);
-		date.day   = UInt8_Parse(*items->buf[2]);
+		date.year  = UInt16_Parse(items->buf[0]);
+		date.month = UInt8_Parse(items->buf[1]);
+		date.day   = UInt8_Parse(items->buf[2]);
 	}
 
-	StringArray_Destroy(items);
 	StringArray_Free(items);
 
 	return date;
@@ -76,11 +75,10 @@ static def(void, Process, String dir, String file) {
 	StringArray *cats = Parser_GetMultiMeta(&this->parser, $("category"));
 
 	foreach (catName, cats) {
-		ssize_t catId = Categories_Resolve(cat, **catName);
+		ssize_t catId = Categories_Resolve(cat, *catName);
 
 		if (catId == -1) {
-			Logger_Error(&logger, $("Category '%' does not exist."),
-				**catName);
+			Logger_Error(&logger, $("Category '%' does not exist."), *catName);
 		} else {
 			Categories_Link(cat, catId, article);
 		}
