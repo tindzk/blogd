@@ -21,7 +21,7 @@ def(size_t, GetPage) {
 	size_t page = 0;
 
 	try {
-		page = UInt32_Parse(this->page);
+		page = UInt32_Parse(this->page.prot);
 	} clean catchModule(Integer) {
 	} finally {
 	} tryEnd;
@@ -79,7 +79,7 @@ action(Home) {
 
 action(Category) {
 	ssize_t catId;
-	String catName = String_Trim(this->category);
+	ProtString catName = String_Trim(this->category.prot);
 
 	PaginationTemplate pg = {
 		.page  = 1,
@@ -95,7 +95,7 @@ action(Category) {
 		.articles = NULL
 	};
 
-	String path = $("");
+	ProtString path = $("");
 
 	MainTemplate main = GetMainTemplate(sess);
 
@@ -132,13 +132,14 @@ action(Category) {
 
 	ConfigurationInstance config = Configuration_GetInstance();
 
-	main.title = String_Format($("% » %"),
-		Configuration_GetTitle(config),
-		path);
+	String title = String_Format($("% » %"),
+		Configuration_GetTitle(config), path);
+
+	main.title = title.prot;
 
 	TemplateResponse(resp, tplMain(&main));
 
-	String_Destroy(&main.title);
+	String_Destroy(&title);
 
 	if (tpl.articles != NULL) {
 		Articles_Free(tpl.articles);

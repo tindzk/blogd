@@ -7,10 +7,11 @@ extern Logger logger;
 Singleton(self);
 SingletonDestructor(self);
 
-def(void, Init) {
-	this->articles = Articles_New(1024);
-
-	Parser_Init(&this->parser);
+rsdef(self, New) {
+	return (self) {
+		.articles = Articles_New(1024),
+		.parser   = Parser_New()
+	};
 }
 
 def(void, Destroy) {
@@ -18,16 +19,15 @@ def(void, Destroy) {
 
 	foreach (article, this->articles) {
 		Article_Destroy(*article);
-		Article_Free(*article);
 	}
 
 	Articles_Free(this->articles);
 }
 
-def(Date, ParseDate, String s) {
+def(Date, ParseDate, ProtString s) {
 	Date date = Date_Empty();
 
-	StringArray *items = String_Split(s, '-');
+	ProtStringArray *items = String_Split(s, '-');
 
 	if (items->len > 2) {
 		date.year  = UInt16_Parse(items->buf[0]);
@@ -35,35 +35,36 @@ def(Date, ParseDate, String s) {
 		date.day   = UInt8_Parse(items->buf[2]);
 	}
 
-	StringArray_Free(items);
+	ProtStringArray_Free(items);
 
 	return date;
 }
 
-static def(void, Process, String dir, String file) {
+static def(void, Process, ProtString dir, ProtString file) {
 	String path = String_Format($("%/%"), dir, file);
 
-	Logger_Info(&logger, $("Processing %..."), path);
+	Logger_Info(&logger, $("Processing %..."), path.prot);
 
 	try {
-		Parser_Parse(&this->parser, path);
+		Parser_Parse(&this->parser, path.prot);
 	} clean finally {
 		String_Destroy(&path);
 	} tryEnd;
 
-	ArticleInstance article = Article_New();
+	Article *article = Article_New();
 
 	Articles_Push(&this->articles, article);
 
-	Article_Init(article);
-
-	Article_SetPath(article, Utils_ExtractName(file));
+	Article_SetPath(article,
+		String_Clone(Utils_ExtractName(file)));
 
 	Article_SetTitle(article,
-		Parser_GetMeta(&this->parser, $("title")));
+		String_Clone(
+			Parser_GetMeta(&this->parser, $("title"))));
 
 	Article_SetLanguage(article,
-		Parser_GetMeta(&this->parser, $("language")));
+		String_Clone(
+			Parser_GetMeta(&this->parser, $("language"))));
 
 	Date date = call(ParseDate,
 		Parser_GetMeta(&this->parser, $("date")));
@@ -72,7 +73,8 @@ static def(void, Process, String dir, String file) {
 
 	CategoriesInstance cat = Categories_GetInstance();
 
-	StringArray *cats = Parser_GetMultiMeta(&this->parser, $("category"));
+	ProtStringArray *cats =
+		Parser_GetMultiMeta(&this->parser, $("category"));
 
 	foreach (catName, cats) {
 		ssize_t catId = Categories_Resolve(cat, *catName);
@@ -84,7 +86,7 @@ static def(void, Process, String dir, String file) {
 		}
 	}
 
-	StringArray_Free(cats);
+	ProtStringArray_Free(cats);
 
 	Parser_Node node =
 		Parser_GetNodeByName(&this->parser, $("descr"));
@@ -107,7 +109,7 @@ static def(void, Process, String dir, String file) {
 		Parser_GetRoot(&this->parser), $("section"));
 
 	foreach (node, nodes) {
-		Article_AddSection(article, node->options,
+		Article_AddSection(article, String_Clone(node->options),
 			Parser_GetBody(&this->parser, node->node, $("")));
 	}
 
@@ -118,14 +120,14 @@ def(size_t, CountArticles) {
 	return this->articles->len;
 }
 
-def(ArticleInstance, GetArticle, String name) {
+def(Article *, GetArticle, ProtString name) {
 	foreach (article, this->articles) {
 		if (String_Equals(Article_GetPath(*article), name)) {
 			return *article;
 		}
 	}
 
-	return Article_Null();
+	return NULL;
 }
 
 def(Articles *, GetArticles, size_t offset, size_t limit) {
@@ -141,7 +143,7 @@ def(Articles *, GetArticles, size_t offset, size_t limit) {
 	return arr;
 }
 
-def(void, Populate, String path) {
+def(void, Populate, ProtString path) {
 	Directory dir;
 	Directory_Init(&dir, path);
 

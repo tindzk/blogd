@@ -2,6 +2,6 @@
 
 #define self Utils
 
-sdef(String, ExtractName, String name);
+sdef(ProtString, ExtractName, ProtString name);
 
 #undef self

@@ -3,15 +3,19 @@
 
 #define self Article
 
-def(void, Init) {
-	this->lng      = $("");
-	this->tags     = $("");
-	this->title    = $("");
-	this->path     = $("");
-	this->date     = Date_Empty();
-	this->descr    = Body_Empty();
-	this->contents = Body_Empty();
-	this->sections = Sections_New(0);
+rsdef(self *, New) {
+	self *res = Pool_Alloc(Pool_GetInstance(), sizeof(self));
+
+	res->lng      = String_New(0);
+	res->tags     = String_New(0);
+	res->title    = String_New(0);
+	res->path     = String_New(0);
+	res->date     = Date_Empty();
+	res->descr    = Body_New();
+	res->contents = Body_New();
+	res->sections = Sections_New(0);
+
+	return res;
 }
 
 def(void, Destroy) {
@@ -28,34 +32,36 @@ def(void, Destroy) {
 	}
 
 	Sections_Free(this->sections);
+
+	Pool_Free(Pool_GetInstance(), this);
 }
 
 def(void, SetPath, String path) {
-	String_Copy(&this->path, path);
+	String_Assign(&this->path, path);
 }
 
-def(String, GetPath) {
-	return String_Disown(this->path);
+def(ProtString, GetPath) {
+	return this->path.prot;
 }
 
 def(void, SetTitle, String title) {
-	String_Copy(&this->title, title);
+	String_Assign(&this->title, title);
 }
 
-def(String, GetTitle) {
-	return String_Disown(this->title);
+def(ProtString, GetTitle) {
+	return this->title.prot;
 }
 
 def(void, SetLanguage, String lng) {
-	String_Copy(&this->lng, lng);
+	String_Assign(&this->lng, lng);
 }
 
-def(String, GetLanguage) {
+def(ProtString, GetLanguage) {
 	if (this->lng.len == 0) {
 		return Blog_DefaultLanguage;
 	}
 
-	return String_Disown(this->lng);
+	return this->lng.prot;
 }
 
 def(void, SetDate, Date date) {
@@ -84,7 +90,7 @@ def(Body *, GetContents) {
 	return &this->contents;
 }
 
-def(String, GetTags) {
+def(ProtString, GetTags) {
 	if (this->tags.buf == NULL) {
 		this->tags = String_New(32);
 
@@ -93,7 +99,7 @@ def(String, GetTags) {
 		foreach (cat, cats) {
 			foreach (article, cat->articles) {
 				if (Article_Equals(*article, this)) {
-					String_Append(&this->tags, cat->name);
+					String_Append(&this->tags, cat->name.prot);
 					String_Append(&this->tags, ',');
 
 					break;
@@ -106,16 +112,14 @@ def(String, GetTags) {
 		}
 	}
 
-	return String_Disown(this->tags);
+	return this->tags.prot;
 }
 
 def(void, AddSection, String title, Body body) {
-	Section sect = {
-		.title = String_Clone(title),
+	Sections_Push(&this->sections, (Section) {
+		.title = title,
 		.body  = body
-	};
-
-	Sections_Push(&this->sections, sect);
+	});
 }
 
 def(Sections *, GetSections) {

@@ -7,19 +7,21 @@ SingletonDestructor(self);
 
 extern Logger logger;
 
-def(void, Init) {
-	this->title     = $("");
-	this->descr     = $("");
-	this->author    = $("");
-	this->copyright = $("");
-	this->license   = $("");
-	this->url       = $("");
-	this->articles  = $("");
-	this->about     = $("");
-	this->filePath  = $("");
-	this->mail      = $("");
-	this->flattr    = $("");
-	this->external  = ExternalArray_New(0);
+def(self, New) {
+	return (self) {
+		.title     = String_New(0),
+		.descr     = String_New(0),
+		.author    = String_New(0),
+		.copyright = String_New(0),
+		.license   = String_New(0),
+		.url       = String_New(0),
+		.articles  = String_New(0),
+		.about     = String_New(0),
+		.filePath  = String_New(0),
+		.mail      = String_New(0),
+		.flattr    = String_New(0),
+		.external  = ExternalArray_New(0)
+	};
 }
 
 def(void, Destroy) {
@@ -43,9 +45,9 @@ def(void, Destroy) {
 	ExternalArray_Free(this->external);
 }
 
-#define Get(name, member)                  \
-	def(String, Get##name) {               \
-		return String_Disown(this->member);\
+#define Get(name, member)         \
+	def(ProtString, Get##name) {  \
+		return this->member.prot; \
 	}
 
 Get(Title, title);
@@ -68,9 +70,15 @@ static def(void, ParseCategories, YAML_Node *node) {
 	CategoriesInstance cat = Categories_GetInstance();
 
 	if (node->type == YAML_NodeType_Item) {
-		Categories_Insert(cat, YAML_Item(node)->value);
+		Categories_Insert(cat,
+			String_ToCarrier(
+				String_Clone(
+					YAML_Item_GetValue(node))));
 	} else if (node->type == YAML_NodeType_Section) {
-		Categories_Insert(cat, YAML_Section(node)->name);
+		Categories_Insert(cat,
+			String_ToCarrier(
+				String_Clone(
+					YAML_Section_GetName(node))));
 	}
 
 	if (node->len > 0) {
@@ -87,8 +95,8 @@ static def(void, ParseCategories, YAML_Node *node) {
 static def(void, AddExternal, YAML_Node *node) {
 	if (node->type == YAML_NodeType_Item) {
 		External ext = {
-			.name = String_Clone(YAML_Item(node)->key),
-			.url  = String_Clone(YAML_Item(node)->value)
+			.name = String_Clone(YAML_Item_GetKey(node)),
+			.url  = String_Clone(YAML_Item_GetValue(node))
 		};
 
 		ExternalArray_Push(&this->external, ext);
@@ -106,8 +114,8 @@ static def(void, ParseYaml, YAML_Node *node) {
 		YAML_Node *child = node->buf[i];
 
 		if (child->type == YAML_NodeType_Item) {
-			String name  = YAML_Item(child)->key;
-			String value = YAML_Item(child)->value;
+			ProtString name  = YAML_Item_GetKey(child);
+			ProtString value = YAML_Item_GetValue(child);
 
 			if (String_Equals(name, $("title"))) {
 				String_Copy(&this->title, value);
@@ -136,7 +144,7 @@ static def(void, ParseYaml, YAML_Node *node) {
 					name);
 			}
 		} else if (child->type == YAML_NodeType_Section) {
-			String name = YAML_Section(child)->name;
+			ProtString name = YAML_Section_GetName(child);
 
 			if (String_Equals(name, $("categories"))) {
 				forward (j, child->len) {
@@ -152,16 +160,14 @@ static def(void, ParseYaml, YAML_Node *node) {
 	}
 }
 
-def(void, Parse, String path) {
+def(void, Parse, ProtString path) {
 	File file;
 	File_Open(&file, path, FileStatus_ReadOnly);
 
-	BufferedStream stream;
-	BufferedStream_Init(&stream, File_AsStream(&file));
+	BufferedStream stream = BufferedStream_New(File_AsStream(&file));
 	BufferedStream_SetInputBuffer(&stream, 1024, 128);
 
-	YAML yml;
-	YAML_Init(&yml, 4, &BufferedStreamImpl, &stream);
+	YAML yml = YAML_New(4, &BufferedStreamImpl, &stream);
 	YAML_Parse(&yml);
 
 	call(ParseYaml, YAML_GetRoot(&yml));

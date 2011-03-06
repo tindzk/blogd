@@ -6,7 +6,7 @@
 #define self Category
 
 record(self) {
-	String name;
+	CarrierString name;
 	Articles *articles;
 };
 

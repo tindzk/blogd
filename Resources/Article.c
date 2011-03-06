@@ -15,8 +15,8 @@ action(AsText) {
 
 	ArticleListingInstance listing = ArticleListing_GetInstance();
 
-	ArticleInstance article = ArticleListing_GetArticle(listing,
-		Utils_ExtractName(String_Trim(this->article)));
+	Article *article = ArticleListing_GetArticle(listing,
+		Utils_ExtractName(String_Trim(this->article.prot)));
 
 	TextDocument doc;
 	TextDocument_Init(&doc, 80);
@@ -27,7 +27,7 @@ action(AsText) {
 
 	String date = Date_Format(Article_GetDate(article), true);
 	TextDocument_Add(&doc, $("Date: "));
-	TextDocument_Add(&doc, date);
+	TextDocument_Add(&doc, date.prot);
 	TextDocument_AddLine(&doc);
 	String_Destroy(&date);
 
@@ -49,7 +49,7 @@ action(AsText) {
 
 	foreach (sect, sects) {
 		TextDocument_Add(&doc, $("== "));
-		TextDocument_Add(&doc, sect->title);
+		TextDocument_Add(&doc, sect->title.prot);
 		TextDocument_AddLine(&doc);
 
 		TextBody_Process(&sect->body, &doc);
@@ -72,8 +72,8 @@ action(AsText) {
 
 	TextDocument_Add(&doc, Configuration_GetLicense(config));
 
-	Response_SetBufferBody(resp, String_Clone(doc.doc));
-	Response_SetContentType(resp, $("text/plain; charset=utf-8"));
+	Response_SetBufferBody (resp, String_ToCarrier(String_Clone(doc.doc.prot)));
+	Response_SetContentType(resp, String_ToCarrier($("text/plain; charset=utf-8")));
 
 	TextDocument_Destroy(&doc);
 }
@@ -87,8 +87,8 @@ action(Article) {
 
 	ArticleListingInstance listing = ArticleListing_GetInstance();
 
-	ArticleInstance article = ArticleListing_GetArticle(listing,
-		Utils_ExtractName(String_Trim(this->article)));
+	Article *article = ArticleListing_GetArticle(listing,
+		Utils_ExtractName(String_Trim(this->article.prot)));
 
 	MainTemplate main = GetMainTemplate(sess);
 
@@ -110,15 +110,19 @@ action(Article) {
 	main.body   = tplArticle(&tpl);
 	main.footer = tplLicense(&license);
 
+	String title = String_New(0);
+
 	if (!Article_IsNull(article)) {
-		main.title = String_Format($("%: %"),
+		title = String_Format($("%: %"),
 			Configuration_GetTitle(config),
 			Article_GetTitle(article));
+
+		main.title = title.prot;
 	}
 
 	TemplateResponse(resp, tplMain(&main));
 
-	String_Destroy(&main.title);
+	String_Destroy(&title);
 }
 
 action(ServeFile) {
@@ -126,9 +130,9 @@ action(ServeFile) {
 
 	String path = String_Format($("%/%-%"),
 		Configuration_GetArticlePath(config),
-		this->article, this->file);
+		this->article.prot, this->file.prot);
 
-	FileResponse(resp, path, *(DateTime *) &req.lastModified);
+	FileResponse(resp, path.prot, *(DateTime *) &req.lastModified);
 
 	String_Destroy(&path);
 }

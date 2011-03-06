@@ -9,17 +9,15 @@ extern Logger logger;
 
 void ref(DestroyNode)(ref(Node) *node);
 
-def(void, Init) {
-	this->categories = CategoryArray_New(32);
-
-	Tree_Init(&this->tree, (void *) ref(DestroyNode));
-
-	Tree_Reset(&this->tree);
-
-	this->node = (ref(Node) *) &this->tree.root;
+rsdef(self, New) {
+	return (self) {
+		.tree = Tree_New((void *) ref(DestroyNode)),
+		.node = NULL,
+		.categories = CategoryArray_New(32)
+	};
 }
 
-void ref(DestroyNode)(__unused ref(Node) *node) {
+sdef(void, DestroyNode, __unused ref(Node) *node) {
 
 }
 
@@ -27,7 +25,7 @@ def(void, Destroy) {
 	Tree_Destroy(&this->tree);
 
 	foreach (cat, this->categories) {
-		String_Destroy(&cat->name);
+		CarrierString_Destroy(&cat->name);
 		Articles_Free(cat->articles);
 	}
 
@@ -35,7 +33,7 @@ def(void, Destroy) {
 }
 
 def(void, EnterNode) {
-	this->node = Tree_AddNode(this->node);
+	this->node = Tree_AddNode(&this->tree, this->node);
 	this->node->isNode = true;
 }
 
@@ -51,20 +49,21 @@ def(CategoryArray *, GetCategories) {
 	return this->categories;
 }
 
-def(void, Insert, String value) {
-	if (String_Contains(value, $("/"))) {
+def(void, Insert, CarrierString value) {
+	if (String_Contains(value.prot, $("/"))) {
 		Logger_Error(&logger,
 			$("Categories must be URI-compatible and thus cannot contain slashes"));
 
+		CarrierString_Destroy(&value);
 		return;
 	}
 
-	ref(Node) *treeNode = Tree_AddNode(this->node);
+	ref(Node) *treeNode = Tree_AddNode(&this->tree, this->node);
 
-	Category cat;
-
-	cat.name     = String_Clone(value);
-	cat.articles = Articles_New(128);
+	Category cat = {
+		.name     = value,
+		.articles = Articles_New(128)
+	};
 
 	CategoryArray_Push(&this->categories, cat);
 
@@ -72,10 +71,10 @@ def(void, Insert, String value) {
 	treeNode->offset = this->categories->len - 1;
 }
 
-def(String, GetName, ref(Node) *node) {
+def(ProtString, GetName, ref(Node) *node) {
 	if (!node->isNode) {
 		Category *cat = &this->categories->buf[node->offset];
-		return String_Disown(cat->name);
+		return cat->name.prot;
 	}
 
 	return $("");
@@ -91,11 +90,11 @@ def(size_t, GetNumArticles, ref(Node) *node) {
 }
 
 /* Returns category offset. */
-def(ssize_t, Resolve, String name) {
+def(ssize_t, Resolve, ProtString name) {
 	size_t i = 0;
 
 	foreach (category, this->categories) {
-		if (String_Equals(category->name, name)) {
+		if (String_Equals(category->name.prot, name)) {
 			return i;
 		}
 

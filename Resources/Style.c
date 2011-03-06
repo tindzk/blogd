@@ -9,11 +9,11 @@ class {
 action(Switch) {
 	UserSessionInstance usrSess = (UserSessionInstance) Session_GetData(sess);
 
-	if (String_Equals(this->style, $("black"))
-	 || String_Equals(this->style, $("brown"))
-	 || String_Equals(this->style, $("white")))
+	if (String_Equals(this->style.prot, $("black")) ||
+		String_Equals(this->style.prot, $("brown")) ||
+		String_Equals(this->style.prot, $("white")))
 	{
-		UserSession_SetStyle(usrSess, this->style);
+		UserSession_SetStyle(usrSess, this->style.prot);
 		Session_SetChanged(sess);
 	}
 

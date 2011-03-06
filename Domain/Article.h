@@ -25,23 +25,23 @@ class {
 
 ExtendClass;
 
-Array(Instance(self), Articles);
+Array(self *, Articles);
 
-def(void, Init);
+rsdef(self *, New);
 def(void, Destroy);
 def(void, SetPath, String path);
-def(String, GetPath);
+def(ProtString, GetPath);
 def(void, SetTitle, String title);
-def(String, GetTitle);
+def(ProtString, GetTitle);
 def(void, SetLanguage, String lng);
-def(String, GetLanguage);
+def(ProtString, GetLanguage);
 def(void, SetDate, Date date);
 def(Date, GetDate);
 def(void, SetDescr, Body descr);
 def(Body *, GetDescr);
 def(void, SetContents, Body contents);
 def(Body *, GetContents);
-def(String, GetTags);
+def(ProtString, GetTags);
 def(void, AddSection, String title, Body body);
 def(Sections *, GetSections);
 def(bool, IsEmpty);

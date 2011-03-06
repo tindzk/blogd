@@ -17,9 +17,9 @@
 Logger logger;
 Terminal term;
 
-void OnLogMessage(__unused void *ptr, FmtString msg, Logger_Level level, String file, int line) {
-	String slevel = Logger_ResolveLevel(level);
-	String sline  = Integer_ToString(line);
+void OnLogMessage(__unused void *ptr, FmtString msg, Logger_Level level, ProtString file, int line) {
+	ProtString slevel = Logger_ResolveLevel(level);
+	String sline = Integer_ToString(line);
 
 	Terminal_FmtPrint(&term,
 		$("[%] $ (%:%)\n"),
@@ -46,7 +46,7 @@ bool startServer(Server *server, ClientListener listener) {
 int main(int argc, char *argv[]) {
 	Signal0();
 
-	Terminal_Init(&term, File_StdIn, File_StdOut, false);
+	term = Terminal_New(File_StdIn, File_StdOut, false);
 
 	Logger_Init(&logger, Callback(NULL, OnLogMessage),
 		Logger_Level_Fatal |
@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
 		Logger_Level_Debug |
 		Logger_Level_Trace);
 
-	String path = Blog_ConfigPath;
+	ProtString path = Blog_ConfigPath;
 
 	if (argc > 1) {
 		path = String_FromNul(argv[1]);
@@ -92,11 +92,6 @@ int main(int argc, char *argv[]) {
 		Logger_Info(&logger, $("Server shutdown."));
 	} catchAny {
 		Exception_Print(e);
-
-#if Exception_SaveTrace
-		Backtrace_PrintTrace(__exc_mgr.e.trace, __exc_mgr.e.traceItems);
-#endif
-
 		excReturn ExitStatus_Failure;
 	} finally {
 		Server_Destroy(&server);

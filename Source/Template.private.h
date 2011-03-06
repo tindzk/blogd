@@ -10,16 +10,16 @@
 #import <Domain/Configuration.h>
 
 tpl(Listing) {
-	String error;
-	Articles *articles;
+	ProtString error;
+	Articles   *articles;
 };
 
 tpl(Feed) {
 	Articles *articles;
 
-	String blogName;
-	String url;
-	String descr;
+	ProtString blogName;
+	ProtString url;
+	ProtString descr;
 };
 
 set(Page) {
@@ -32,7 +32,7 @@ set(Page) {
 
 record(PagePath) {
 	Page page;
-	String name;
+	ProtString name;
 };
 
 tpl(Pagination) {
@@ -42,18 +42,18 @@ tpl(Pagination) {
 };
 
 tpl(Article) {
-	String url;
-	String error;
-	String flattr;
-	ArticleInstance article;
+	ProtString url;
+	ProtString error;
+	ProtString flattr;
+	Article *article;
 };
 
 tpl(About) {
-	String text;
+	ProtString text;
 };
 
 tpl(License) {
-	String text;
+	ProtString text;
 };
 
 tpl(Categories) {
@@ -64,19 +64,19 @@ tpl(Categories) {
 tpl(Main) {
 	Page page;
 
-	String style;
+	ProtString style;
 
-	String title;
-	String blogName;
+	ProtString title;
+	ProtString blogName;
 
 	bool flattr;
 
-	String mail;
-	String author;
-	String copyright;
+	ProtString mail;
+	ProtString author;
+	ProtString copyright;
 
-	String url;
-	String descr;
+	ProtString url;
+	ProtString descr;
 
 	ssize_t catId;
 	Categories_Node *cats;

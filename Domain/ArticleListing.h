@@ -17,12 +17,12 @@ class {
 
 SingletonPrototype(self);
 
-def(void, Init);
+rsdef(self, New);
 def(void, Destroy);
-def(Date, ParseDate, String s);
+def(Date, ParseDate, ProtString s);
 def(size_t, CountArticles);
-def(ArticleInstance, GetArticle, String name);
+def(Article *, GetArticle, ProtString name);
 def(Articles *, GetArticles, size_t offset, size_t limit);
-def(void, Populate, String path);
+def(void, Populate, ProtString path);
 
 #undef self

@@ -29,10 +29,8 @@ class {
 	ExternalArray *external;
 };
 
-SingletonPrototype(self);
-
 #define Get(name) \
-	def(String, Get##name)
+	def(ProtString, Get##name)
 
 Get(Title);
 Get(Descr);
@@ -50,8 +48,10 @@ Get(Flattr);
 
 def(ExternalArray *, GetExternal);
 
-def(void, Init);
+rsdef(self, New);
 def(void, Destroy);
-def(void, Parse, String path);
+def(void, Parse, ProtString path);
+
+SingletonPrototype(self);
 
 #undef self

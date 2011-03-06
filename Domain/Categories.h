@@ -22,16 +22,16 @@ class {
 
 SingletonPrototype(self);
 
-def(void, Init);
+rsdef(self, New);
 def(void, Destroy);
 def(void, EnterNode);
 def(void, LeaveNode);
 def(ref(Node) *, GetRoot);
 def(CategoryArray *, GetCategories);
-def(void, Insert, String value);
-def(String, GetName, ref(Node) *node);
+def(void, Insert, CarrierString value);
+def(ProtString, GetName, ref(Node) *node);
 def(size_t, GetNumArticles, ref(Node) *node);
-def(ssize_t, Resolve, String category);
+def(ssize_t, Resolve, ProtString category);
 def(void, Link, size_t id, ArticleInstance article);
 def(size_t, CountArticles, size_t cat);
 def(Articles *, GetArticles, size_t cat, size_t offset, size_t limit);

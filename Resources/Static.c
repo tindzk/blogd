@@ -3,16 +3,17 @@
 #define self Static
 
 class {
-	String _path;
+	ProtString _path;
 
 	String file;
 	String style;
 };
 
 action(_Serve) {
-	if (String_Equals(this->file, $("."))
-	 || String_Equals(this->file, $(".."))
-	 || String_Contains(this->file, $("/"))) {
+	if (String_Equals  (this->file.prot, $("."))  ||
+		String_Equals  (this->file.prot, $("..")) ||
+		String_Contains(this->file.prot, $("/")))
+	{
 		Response_SetStatus(resp, HTTP_Status_ClientError_Forbidden);
 		BufferResponse(resp, $("Access denied."));
 
@@ -26,14 +27,14 @@ action(_Serve) {
 	if (this->style.len > 0) {
 		path = String_Format($("%/%/%/%"),
 			Configuration_GetFilePath(config),
-			this->_path, this->style, this->file);
+			this->_path, this->style.prot, this->file.prot);
 	} else {
 		path = String_Format($("%/%/%"),
 			Configuration_GetFilePath(config),
-			this->_path, this->file);
+			this->_path, this->file.prot);
 	}
 
-	FileResponse(resp, path, *(DateTime *) &req.lastModified);
+	FileResponse(resp, path.prot, *(DateTime *) &req.lastModified);
 
 	String_Destroy(&path);
 }
