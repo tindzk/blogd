@@ -1,3 +1,4 @@
+#import <Main.h>
 #import <Server.h>
 #import <String.h>
 #import <Logger.h>
@@ -43,9 +44,7 @@ bool startServer(Server *server, ClientListener listener) {
 	return false;
 }
 
-int main(int argc, char *argv[]) {
-	Signal0();
-
+bool Main(__unused ProtString base, ProtStringArray *args) {
 	term = Terminal_New(File_StdIn, File_StdOut, false);
 
 	Logger_Init(&logger, Callback(NULL, OnLogMessage),
@@ -57,11 +56,10 @@ int main(int argc, char *argv[]) {
 		Logger_Level_Debug |
 		Logger_Level_Trace);
 
-	ProtString path = Blog_ConfigPath;
-
-	if (argc > 1) {
-		path = String_FromNul(argv[1]);
-	}
+	ProtString path =
+		(args->len == 0)
+			? Blog_ConfigPath
+			: args->buf[0];
 
 	ConfigurationInstance config = Configuration_GetInstance();
 	Configuration_Parse(config, path);
@@ -81,7 +79,7 @@ int main(int argc, char *argv[]) {
 	if (!startServer(&server,
 		GenericClientListener_AsClientListener(&listener)))
 	{
-		return ExitStatus_Failure;
+		return false;
 	}
 
 	try {
@@ -90,13 +88,10 @@ int main(int argc, char *argv[]) {
 		}
 	} clean catch(Signal, SigInt) {
 		Logger_Info(&logger, $("Server shutdown."));
-	} catchAny {
-		Exception_Print(e);
-		excReturn ExitStatus_Failure;
 	} finally {
 		Server_Destroy(&server);
 		Terminal_Destroy(&term);
 	} tryEnd;
 
-	return ExitStatus_Success;
+	return true;
 }
