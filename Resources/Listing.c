@@ -22,7 +22,7 @@ def(size_t, GetPage) {
 
 	try {
 		page = UInt32_Parse(this->page.prot);
-	} clean catchModule(Integer) {
+	} catchModule(Integer) {
 	} finally {
 	} tryEnd;
 

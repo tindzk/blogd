@@ -23,8 +23,6 @@ class {
 	Sections *sections;
 };
 
-ExtendClass;
-
 Array(self *, Articles);
 
 rsdef(self *, New);

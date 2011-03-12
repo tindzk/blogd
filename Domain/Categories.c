@@ -104,7 +104,7 @@ def(ssize_t, Resolve, ProtString name) {
 	return -1;
 }
 
-def(void, Link, size_t id, ArticleInstance article) {
+def(void, Link, size_t id, Article *article) {
 	if (id >= this->categories->len) {
 		return;
 	}

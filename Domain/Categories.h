@@ -32,7 +32,7 @@ def(void, Insert, CarrierString value);
 def(ProtString, GetName, ref(Node) *node);
 def(size_t, GetNumArticles, ref(Node) *node);
 def(ssize_t, Resolve, ProtString category);
-def(void, Link, size_t id, ArticleInstance article);
+def(void, Link, size_t id, Article *article);
 def(size_t, CountArticles, size_t cat);
 def(Articles *, GetArticles, size_t cat, size_t offset, size_t limit);
 

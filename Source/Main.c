@@ -34,7 +34,7 @@ bool startServer(Server *server, ClientListener listener) {
 		Server_Init(server, 8080, listener);
 		Logger_Info(&logger, $("Server started."));
 		excReturn true;
-	} clean catch (Socket, AddressInUse) {
+	} catch (Socket, AddressInUse) {
 		Logger_Error(&logger, $("The address is already in use!"));
 		excReturn false;
 	} finally {
@@ -44,7 +44,11 @@ bool startServer(Server *server, ClientListener listener) {
 	return false;
 }
 
-bool Main(__unused ProtString base, ProtStringArray *args) {
+bool Main (
+	__unused ProtString base,
+	ProtStringArray *args,
+	__unused ProtStringArray *env
+) {
 	term = Terminal_New(File_StdIn, File_StdOut, false);
 
 	Logger_Init(&logger, Callback(NULL, OnLogMessage),
@@ -86,7 +90,7 @@ bool Main(__unused ProtString base, ProtStringArray *args) {
 		while (true) {
 			Server_Process(&server);
 		}
-	} clean catch(Signal, SigInt) {
+	} catch(Signal, SigInt) {
 		Logger_Info(&logger, $("Server shutdown."));
 	} finally {
 		Server_Destroy(&server);

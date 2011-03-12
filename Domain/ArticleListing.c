@@ -47,7 +47,7 @@ static def(void, Process, ProtString dir, ProtString file) {
 
 	try {
 		Parser_Parse(&this->parser, path.prot);
-	} clean finally {
+	} finally {
 		String_Destroy(&path);
 	} tryEnd;
 
