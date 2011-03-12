@@ -20,7 +20,7 @@ action(Switch) {
 	if (req.referer.len == 0) {
 		RedirectResponse(resp, $("/"));
 	} else {
-		RedirectResponse(resp, req.referer);
+		RedirectResponse(resp, String_Clone(req.referer.prot));
 	}
 }
 
