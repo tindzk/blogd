@@ -5,9 +5,7 @@
 Singleton(self);
 SingletonDestructor(self);
 
-extern Logger logger;
-
-void ref(DestroyNode)(ref(Node) *node);
+sdef(void, DestroyNode, __unused ref(Node) *node);
 
 rsdef(self, New) {
 	return (self) {
@@ -32,6 +30,10 @@ def(void, Destroy) {
 	CategoryArray_Free(this->categories);
 }
 
+def(void, SetLogger, Logger *logger) {
+	this->logger = logger;
+}
+
 def(void, EnterNode) {
 	this->node = Tree_AddNode(&this->tree, this->node);
 	this->node->isNode = true;
@@ -51,7 +53,7 @@ def(CategoryArray *, GetCategories) {
 
 def(void, Insert, CarrierString value) {
 	if (String_Contains(value.rd, $("/"))) {
-		Logger_Error(&logger,
+		Logger_Error(this->logger,
 			$("Categories must be URI-compatible and thus cannot contain slashes"));
 
 		CarrierString_Destroy(&value);

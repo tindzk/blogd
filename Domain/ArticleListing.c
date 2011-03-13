@@ -2,8 +2,6 @@
 
 #define self ArticleListing
 
-extern Logger logger;
-
 Singleton(self);
 SingletonDestructor(self);
 
@@ -22,6 +20,10 @@ def(void, Destroy) {
 	}
 
 	Articles_Free(this->articles);
+}
+
+def(void, SetLogger, Logger *logger) {
+	this->logger = logger;
 }
 
 def(Date, ParseDate, RdString s) {
@@ -43,7 +45,7 @@ def(Date, ParseDate, RdString s) {
 static def(void, Process, RdString dir, RdString file) {
 	String path = String_Format($("%/%"), dir, file);
 
-	Logger_Info(&logger, $("Processing %..."), path.rd);
+	Logger_Info(this->logger, $("Processing %..."), path.rd);
 
 	try {
 		Parser_Parse(&this->parser, path.rd);
@@ -80,7 +82,7 @@ static def(void, Process, RdString dir, RdString file) {
 		ssize_t catId = Categories_Resolve(cat, *catName);
 
 		if (catId == -1) {
-			Logger_Error(&logger, $("Category '%' does not exist."), *catName);
+			Logger_Error(this->logger, $("Category '%' does not exist."), *catName);
 		} else {
 			Categories_Link(cat, catId, article);
 		}

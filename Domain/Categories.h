@@ -1,5 +1,6 @@
 #import <Tree.h>
 #import <String.h>
+#import <Logger.h>
 
 #import "Article.h"
 #import "Category.h"
@@ -14,16 +15,17 @@ record(ref(Node)) {
 };
 
 class {
+	Logger        *logger;
 	CategoryArray *categories;
-
-	Tree tree;
-	ref(Node) *node;
+	Tree          tree;
+	ref(Node)     *node;
 };
 
 SingletonPrototype(self);
 
 rsdef(self, New);
 def(void, Destroy);
+def(void, SetLogger, Logger *logger);
 def(void, EnterNode);
 def(void, LeaveNode);
 def(ref(Node) *, GetRoot);

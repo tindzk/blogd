@@ -5,8 +5,6 @@
 Singleton(self);
 SingletonDestructor(self);
 
-extern Logger logger;
-
 def(self, New) {
 	return (self) {
 		.title     = String_New(0),
@@ -43,6 +41,10 @@ def(void, Destroy) {
 	}
 
 	ExternalArray_Free(this->external);
+}
+
+def(void, SetLogger, Logger *logger) {
+	this->logger = logger;
 }
 
 #define Get(name, member)       \
@@ -140,7 +142,7 @@ static def(void, ParseYaml, YAML_Node *node) {
 			} else if (String_Equals(name, $("flattr"))) {
 				String_Copy(&this->flattr, value);
 			} else {
-				Logger_Error(&logger, $("Unknown option '%'"),
+				Logger_Error(this->logger, $("Unknown option '%'"),
 					name);
 			}
 		} else if (child->type == YAML_NodeType_Section) {
@@ -153,7 +155,7 @@ static def(void, ParseYaml, YAML_Node *node) {
 			} else if (String_Equals(name, $("external"))) {
 				call(AddExternal, child);
 			} else {
-				Logger_Error(&logger, $("Unknown option '%'"),
+				Logger_Error(this->logger, $("Unknown option '%'"),
 					name);
 			}
 		}

@@ -10,15 +10,17 @@
 #define self ArticleListing
 
 class {
-	Parser parser;
 	Categories cat;
-	Articles *articles;
+	Parser     parser;
+	Logger     *logger;
+	Articles   *articles;
 };
 
 SingletonPrototype(self);
 
 rsdef(self, New);
 def(void, Destroy);
+def(void, SetLogger, Logger *logger);
 def(Date, ParseDate, RdString s);
 def(size_t, CountArticles);
 def(Article *, GetArticle, RdString name);

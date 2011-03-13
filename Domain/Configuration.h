@@ -15,6 +15,7 @@ record(External) {
 Array(External, ExternalArray);
 
 class {
+	Logger *logger;
 	String title;
 	String descr;
 	String author;
@@ -50,6 +51,7 @@ def(ExternalArray *, GetExternal);
 
 rsdef(self, New);
 def(void, Destroy);
+def(void, SetLogger, Logger *logger);
 def(void, Parse, RdString path);
 
 SingletonPrototype(self);
