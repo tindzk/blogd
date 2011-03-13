@@ -17,10 +17,12 @@ action(Switch) {
 		Session_SetChanged(sess);
 	}
 
-	if (req.referer.len == 0) {
+	if (Request_GetReferer(req).len == 0) {
 		RedirectResponse(resp, $$("/"));
 	} else {
-		RedirectResponse(resp, String_Clone(req.referer.rd));
+		RedirectResponse(resp,
+			String_Clone(
+				Request_GetReferer(req)));
 	}
 }
 

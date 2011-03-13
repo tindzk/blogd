@@ -34,7 +34,8 @@ action(_Serve) {
 			this->_path, this->file.rd);
 	}
 
-	FileResponse(resp, path.rd, *(DateTime *) &req.lastModified);
+	Date_RFC822 lastModified = Request_GetLastModified(req);
+	FileResponse(resp, path.rd, *(DateTime *) &lastModified);
 
 	String_Destroy(&path);
 }
