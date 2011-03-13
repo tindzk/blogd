@@ -10,12 +10,12 @@ static def(void, Destroy) {
 	String_Destroy(&this->style);
 }
 
-def(void, SetStyle, ProtString style) {
+def(void, SetStyle, RdString style) {
 	String_Copy(&this->style, style);
 }
 
-def(ProtString, GetStyle) {
-	return this->style.prot;
+def(RdString, GetStyle) {
+	return this->style.rd;
 }
 
 Impl(BackendSession) = {

@@ -50,7 +50,7 @@ def(CategoryArray *, GetCategories) {
 }
 
 def(void, Insert, CarrierString value) {
-	if (String_Contains(value.prot, $("/"))) {
+	if (String_Contains(value.rd, $("/"))) {
 		Logger_Error(&logger,
 			$("Categories must be URI-compatible and thus cannot contain slashes"));
 
@@ -71,10 +71,10 @@ def(void, Insert, CarrierString value) {
 	treeNode->offset = this->categories->len - 1;
 }
 
-def(ProtString, GetName, ref(Node) *node) {
+def(RdString, GetName, ref(Node) *node) {
 	if (!node->isNode) {
 		Category *cat = &this->categories->buf[node->offset];
-		return cat->name.prot;
+		return cat->name.rd;
 	}
 
 	return $("");
@@ -90,11 +90,11 @@ def(size_t, GetNumArticles, ref(Node) *node) {
 }
 
 /* Returns category offset. */
-def(ssize_t, Resolve, ProtString name) {
+def(ssize_t, Resolve, RdString name) {
 	size_t i = 0;
 
 	foreach (category, this->categories) {
-		if (String_Equals(category->name.prot, name)) {
+		if (String_Equals(category->name.rd, name)) {
 			return i;
 		}
 

@@ -19,10 +19,10 @@ SingletonPrototype(self);
 
 rsdef(self, New);
 def(void, Destroy);
-def(Date, ParseDate, ProtString s);
+def(Date, ParseDate, RdString s);
 def(size_t, CountArticles);
-def(Article *, GetArticle, ProtString name);
+def(Article *, GetArticle, RdString name);
 def(Articles *, GetArticles, size_t offset, size_t limit);
-def(void, Populate, ProtString path);
+def(void, Populate, RdString path);
 
 #undef self

@@ -2,7 +2,7 @@
 
 #define self Utils
 
-sdef(ProtString, ExtractName, ProtString name) {
+sdef(RdString, ExtractName, RdString name) {
 	ssize_t pos = String_ReverseFind(name, '.');
 
 	if (pos != String_NotFound) {

@@ -30,7 +30,7 @@ class {
 };
 
 #define Get(name) \
-	def(ProtString, Get##name)
+	def(RdString, Get##name)
 
 Get(Title);
 Get(Descr);
@@ -50,7 +50,7 @@ def(ExternalArray *, GetExternal);
 
 rsdef(self, New);
 def(void, Destroy);
-def(void, Parse, ProtString path);
+def(void, Parse, RdString path);
 
 SingletonPrototype(self);
 

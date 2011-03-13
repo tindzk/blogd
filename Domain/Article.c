@@ -40,28 +40,28 @@ def(void, SetPath, String path) {
 	String_Assign(&this->path, path);
 }
 
-def(ProtString, GetPath) {
-	return this->path.prot;
+def(RdString, GetPath) {
+	return this->path.rd;
 }
 
 def(void, SetTitle, String title) {
 	String_Assign(&this->title, title);
 }
 
-def(ProtString, GetTitle) {
-	return this->title.prot;
+def(RdString, GetTitle) {
+	return this->title.rd;
 }
 
 def(void, SetLanguage, String lng) {
 	String_Assign(&this->lng, lng);
 }
 
-def(ProtString, GetLanguage) {
+def(RdString, GetLanguage) {
 	if (this->lng.len == 0) {
 		return Blog_DefaultLanguage;
 	}
 
-	return this->lng.prot;
+	return this->lng.rd;
 }
 
 def(void, SetDate, Date date) {
@@ -90,7 +90,7 @@ def(Body *, GetContents) {
 	return &this->contents;
 }
 
-def(ProtString, GetTags) {
+def(RdString, GetTags) {
 	if (this->tags.buf == NULL) {
 		this->tags = String_New(32);
 
@@ -99,7 +99,7 @@ def(ProtString, GetTags) {
 		foreach (cat, cats) {
 			foreach (article, cat->articles) {
 				if (Article_Equals(*article, this)) {
-					String_Append(&this->tags, cat->name.prot);
+					String_Append(&this->tags, cat->name.rd);
 					String_Append(&this->tags, ',');
 
 					break;
@@ -112,7 +112,7 @@ def(ProtString, GetTags) {
 		}
 	}
 
-	return this->tags.prot;
+	return this->tags.rd;
 }
 
 def(void, AddSection, String title, Body body) {

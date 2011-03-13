@@ -24,10 +24,10 @@ def(void, Destroy) {
 	Articles_Free(this->articles);
 }
 
-def(Date, ParseDate, ProtString s) {
+def(Date, ParseDate, RdString s) {
 	Date date = Date_Empty();
 
-	ProtStringArray *items = String_Split(s, '-');
+	RdStringArray *items = String_Split(s, '-');
 
 	if (items->len > 2) {
 		date.year  = UInt16_Parse(items->buf[0]);
@@ -35,18 +35,18 @@ def(Date, ParseDate, ProtString s) {
 		date.day   = UInt8_Parse(items->buf[2]);
 	}
 
-	ProtStringArray_Free(items);
+	RdStringArray_Free(items);
 
 	return date;
 }
 
-static def(void, Process, ProtString dir, ProtString file) {
+static def(void, Process, RdString dir, RdString file) {
 	String path = String_Format($("%/%"), dir, file);
 
-	Logger_Info(&logger, $("Processing %..."), path.prot);
+	Logger_Info(&logger, $("Processing %..."), path.rd);
 
 	try {
-		Parser_Parse(&this->parser, path.prot);
+		Parser_Parse(&this->parser, path.rd);
 	} finally {
 		String_Destroy(&path);
 	} tryEnd;
@@ -73,7 +73,7 @@ static def(void, Process, ProtString dir, ProtString file) {
 
 	CategoriesInstance cat = Categories_GetInstance();
 
-	ProtStringArray *cats =
+	RdStringArray *cats =
 		Parser_GetMultiMeta(&this->parser, $("category"));
 
 	foreach (catName, cats) {
@@ -86,7 +86,7 @@ static def(void, Process, ProtString dir, ProtString file) {
 		}
 	}
 
-	ProtStringArray_Free(cats);
+	RdStringArray_Free(cats);
 
 	Parser_Node node =
 		Parser_GetNodeByName(&this->parser, $("descr"));
@@ -120,7 +120,7 @@ def(size_t, CountArticles) {
 	return this->articles->len;
 }
 
-def(Article *, GetArticle, ProtString name) {
+def(Article *, GetArticle, RdString name) {
 	foreach (article, this->articles) {
 		if (String_Equals(Article_GetPath(*article), name)) {
 			return *article;
@@ -143,7 +143,7 @@ def(Articles *, GetArticles, size_t offset, size_t limit) {
 	return arr;
 }
 
-def(void, Populate, ProtString path) {
+def(void, Populate, RdString path) {
 	Directory dir;
 	Directory_Init(&dir, path);
 

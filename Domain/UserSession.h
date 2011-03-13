@@ -6,8 +6,8 @@ class {
 	String style;
 };
 
-def(void, SetStyle, ProtString style);
-def(ProtString, GetStyle);
+def(void, SetStyle, RdString style);
+def(RdString, GetStyle);
 
 ExportImpl(BackendSession);
 

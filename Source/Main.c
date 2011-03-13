@@ -18,8 +18,8 @@
 Logger logger;
 Terminal term;
 
-void OnLogMessage(__unused void *ptr, FmtString msg, Logger_Level level, ProtString file, int line) {
-	ProtString slevel = Logger_ResolveLevel(level);
+void OnLogMessage(__unused void *ptr, FmtString msg, Logger_Level level, RdString file, int line) {
+	RdString slevel = Logger_ResolveLevel(level);
 	String sline = Integer_ToString(line);
 
 	Terminal_FmtPrint(&term,
@@ -45,9 +45,9 @@ bool startServer(Server *server, ClientListener listener) {
 }
 
 bool Main (
-	__unused ProtString base,
-	ProtStringArray *args,
-	__unused ProtStringArray *env
+	__unused RdString base,
+	RdStringArray *args,
+	__unused RdStringArray *env
 ) {
 	term = Terminal_New(File_StdIn, File_StdOut, false);
 
@@ -60,7 +60,7 @@ bool Main (
 		Logger_Level_Debug |
 		Logger_Level_Trace);
 
-	ProtString path =
+	RdString path =
 		(args->len == 0)
 			? Blog_ConfigPath
 			: args->buf[0];

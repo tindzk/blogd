@@ -45,9 +45,9 @@ def(void, Destroy) {
 	ExternalArray_Free(this->external);
 }
 
-#define Get(name, member)         \
-	def(ProtString, Get##name) {  \
-		return this->member.prot; \
+#define Get(name, member)       \
+	def(RdString, Get##name) {  \
+		return this->member.rd; \
 	}
 
 Get(Title, title);
@@ -114,8 +114,8 @@ static def(void, ParseYaml, YAML_Node *node) {
 		YAML_Node *child = node->buf[i];
 
 		if (child->type == YAML_NodeType_Item) {
-			ProtString name  = YAML_Item_GetKey(child);
-			ProtString value = YAML_Item_GetValue(child);
+			RdString name  = YAML_Item_GetKey(child);
+			RdString value = YAML_Item_GetValue(child);
 
 			if (String_Equals(name, $("title"))) {
 				String_Copy(&this->title, value);
@@ -144,7 +144,7 @@ static def(void, ParseYaml, YAML_Node *node) {
 					name);
 			}
 		} else if (child->type == YAML_NodeType_Section) {
-			ProtString name = YAML_Section_GetName(child);
+			RdString name = YAML_Section_GetName(child);
 
 			if (String_Equals(name, $("categories"))) {
 				forward (j, child->len) {
@@ -160,7 +160,7 @@ static def(void, ParseYaml, YAML_Node *node) {
 	}
 }
 
-def(void, Parse, ProtString path) {
+def(void, Parse, RdString path) {
 	File file;
 	File_Open(&file, path, FileStatus_ReadOnly);
 

@@ -9,18 +9,18 @@ class {
 action(Switch) {
 	UserSessionInstance usrSess = (UserSessionInstance) Session_GetData(sess);
 
-	if (String_Equals(this->style.prot, $("black")) ||
-		String_Equals(this->style.prot, $("brown")) ||
-		String_Equals(this->style.prot, $("white")))
+	if (String_Equals(this->style.rd, $("black")) ||
+		String_Equals(this->style.rd, $("brown")) ||
+		String_Equals(this->style.rd, $("white")))
 	{
-		UserSession_SetStyle(usrSess, this->style.prot);
+		UserSession_SetStyle(usrSess, this->style.rd);
 		Session_SetChanged(sess);
 	}
 
 	if (req.referer.len == 0) {
-		RedirectResponse(resp, $("/"));
+		RedirectResponse(resp, $$("/"));
 	} else {
-		RedirectResponse(resp, String_Clone(req.referer.prot));
+		RedirectResponse(resp, String_Clone(req.referer.rd));
 	}
 }
 

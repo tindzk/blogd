@@ -21,7 +21,7 @@ def(size_t, GetPage) {
 	size_t page = 0;
 
 	try {
-		page = UInt32_Parse(this->page.prot);
+		page = UInt32_Parse(this->page.rd);
 	} catchModule(Integer) {
 	} finally {
 	} tryEnd;
@@ -79,7 +79,7 @@ action(Home) {
 
 action(Category) {
 	ssize_t catId;
-	ProtString catName = String_Trim(this->category.prot);
+	RdString catName = String_Trim(this->category.rd);
 
 	PaginationTemplate pg = {
 		.page  = 1,
@@ -95,7 +95,7 @@ action(Category) {
 		.articles = NULL
 	};
 
-	ProtString path = $("");
+	RdString path = $("");
 
 	MainTemplate main = GetMainTemplate(sess);
 
@@ -135,7 +135,7 @@ action(Category) {
 	String title = String_Format($("% » %"),
 		Configuration_GetTitle(config), path);
 
-	main.title = title.prot;
+	main.title = title.rd;
 
 	TemplateResponse(resp, tplMain(&main));
 
