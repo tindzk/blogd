@@ -17,7 +17,7 @@ rsdef(self, New) {
 def(void, Destroy) {
 	Parser_Destroy(&this->parser);
 
-	foreach (article, this->articles) {
+	each(article, this->articles) {
 		Article_Destroy(*article);
 	}
 
@@ -76,7 +76,7 @@ static def(void, Process, RdString dir, RdString file) {
 	RdStringArray *cats =
 		Parser_GetMultiMeta(&this->parser, $("category"));
 
-	foreach (catName, cats) {
+	each(catName, cats) {
 		ssize_t catId = Categories_Resolve(cat, *catName);
 
 		if (catId == -1) {
@@ -108,7 +108,7 @@ static def(void, Process, RdString dir, RdString file) {
 	Parser_Nodes *nodes = Parser_GetNodesByName(&this->parser,
 		Parser_GetRoot(&this->parser), $("section"));
 
-	foreach (node, nodes) {
+	each(node, nodes) {
 		Article_AddSection(article, String_Clone(node->options),
 			Parser_GetBody(&this->parser, node->node, $("")));
 	}
@@ -121,7 +121,7 @@ def(size_t, CountArticles) {
 }
 
 def(Article *, GetArticle, RdString name) {
-	foreach (article, this->articles) {
+	each(article, this->articles) {
 		if (String_Equals(Article_GetPath(*article), name)) {
 			return *article;
 		}

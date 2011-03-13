@@ -26,7 +26,7 @@ def(void, Destroy) {
 	Body_Destroy(&this->descr);
 	Body_Destroy(&this->contents);
 
-	foreach (sect, this->sections) {
+	each(sect, this->sections) {
 		String_Destroy(&sect->title);
 		Body_Destroy(&sect->body);
 	}
@@ -96,8 +96,8 @@ def(RdString, GetTags) {
 
 		CategoryArray *cats = Categories_GetCategories(Categories_GetInstance());
 
-		foreach (cat, cats) {
-			foreach (article, cat->articles) {
+		each(cat, cats) {
+			each(article, cat->articles) {
 				if (Article_Equals(*article, this)) {
 					String_Append(&this->tags, cat->name.rd);
 					String_Append(&this->tags, ',');

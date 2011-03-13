@@ -47,7 +47,7 @@ action(AsText) {
 
 	Sections *sects = Article_GetSections(article);
 
-	foreach (sect, sects) {
+	each(sect, sects) {
 		TextDocument_Add(&doc, $("== "));
 		TextDocument_Add(&doc, sect->title.rd);
 		TextDocument_AddLine(&doc);

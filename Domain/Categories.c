@@ -24,7 +24,7 @@ sdef(void, DestroyNode, __unused ref(Node) *node) {
 def(void, Destroy) {
 	Tree_Destroy(&this->tree);
 
-	foreach (cat, this->categories) {
+	each(cat, this->categories) {
 		CarrierString_Destroy(&cat->name);
 		Articles_Free(cat->articles);
 	}
@@ -93,7 +93,7 @@ def(size_t, GetNumArticles, ref(Node) *node) {
 def(ssize_t, Resolve, RdString name) {
 	size_t i = 0;
 
-	foreach (category, this->categories) {
+	each(category, this->categories) {
 		if (String_Equals(category->name.rd, name)) {
 			return i;
 		}

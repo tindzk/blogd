@@ -37,7 +37,7 @@ def(void, Destroy) {
 	String_Destroy(&this->mail);
 	String_Destroy(&this->flattr);
 
-	foreach (item, this->external) {
+	each(item, this->external) {
 		String_Destroy(&item->name);
 		String_Destroy(&item->url);
 	}
@@ -84,7 +84,7 @@ static def(void, ParseCategories, YAML_Node *node) {
 	if (node->len > 0) {
 		Categories_EnterNode(cat);
 
-		forward (i, node->len) {
+		fwd(i, node->len) {
 			call(ParseCategories, node->buf[i]);
 		}
 
@@ -103,14 +103,14 @@ static def(void, AddExternal, YAML_Node *node) {
 	}
 
 	if (node->len > 0) {
-		forward (i, node->len) {
+		fwd(i, node->len) {
 			call(AddExternal, node->buf[i]);
 		}
 	}
 }
 
 static def(void, ParseYaml, YAML_Node *node) {
-	forward (i, node->len) {
+	fwd(i, node->len) {
 		YAML_Node *child = node->buf[i];
 
 		if (child->type == YAML_NodeType_Item) {
@@ -147,7 +147,7 @@ static def(void, ParseYaml, YAML_Node *node) {
 			RdString name = YAML_Section_GetName(child);
 
 			if (String_Equals(name, $("categories"))) {
-				forward (j, child->len) {
+				fwd(j, child->len) {
 					call(ParseCategories, child->buf[j]);
 				}
 			} else if (String_Equals(name, $("external"))) {
