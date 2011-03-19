@@ -5,18 +5,12 @@
 Singleton(self);
 SingletonDestructor(self);
 
-sdef(void, DestroyNode, __unused ref(Node) *node);
-
 rsdef(self, New) {
 	return (self) {
-		.tree = Tree_New((void *) ref(DestroyNode)),
+		.tree = Tree_New(EmptyCallback()),
 		.node = NULL,
 		.categories = CategoryArray_New(32)
 	};
-}
-
-sdef(void, DestroyNode, __unused ref(Node) *node) {
-
 }
 
 def(void, Destroy) {
